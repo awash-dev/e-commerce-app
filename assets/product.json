@@ -7,8 +7,7 @@
       "price": 799.99,
       "category": "Electronics",
       "stock": 30,
-      "image": "https://images.samsung.com/is/image/samsung/p6pim/latin/sm-s901ezkgzto/gallery/latin-galaxy-s22-5g-galaxy-s22-5g-sm-s901ezkgzto-368287177?$720_576_PNG$"
-  
+      "image": "https://images.unsplash.com/photo-1595231712325-9fedecef7575?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
     },
     {
       "id": 2,
@@ -17,7 +16,7 @@
       "price": 799.99,
       "category": "Electronics",
       "stock": 30,
-      "image": "https://images.samsung.com/is/image/samsung/p6pim/latin/sm-s901ezkgzto/gallery/latin-galaxy-s22-5g-galaxy-s22-5g-sm-s901ezkgzto-368287177?$720_576_PNG$"
+      "image": "https://images.unsplash.com/photo-1595231712325-9fedecef7575?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
     },
     {
       "id": 3,
@@ -26,7 +25,7 @@
       "price": 349.99,
       "category": "Electronics",
       "stock": 75,
-      "image": "https://www.sony.com/image/1e7b7c2c1e8c3c5e2a2f2c7c3a4e5b5d?fmt=pjpeg&wid=330&bgcolor=FFFFFF&bgc=FFFFFF"
+      "image": "https://images.unsplash.com/photo-1595231712325-9fedecef7575?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
     },
     {
       "id": 4,
@@ -35,7 +34,7 @@
       "price": 1249.99,
       "category": "Computers",
       "stock": 20,
-      "image": "https://i.dell.com/is/image/DellContent/dell-xps-13-9310-laptop-lifestyle-1?$desktop$"
+      "image": "https://images.unsplash.com/photo-1595231712325-9fedecef7575?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
     },
     {
       "id": 5,
@@ -44,8 +43,8 @@
       "price": 149.99,
       "category": "Footwear",
       "stock": 100,
-      "image": "https://static.nike.com/a/images/t_default/6c4f4a7d-5b3b-4c4f-9c5e-1f3e1c4b3c2f/air-max-270-mens-shoes-8GZ8kp.png"
-    },
+     "image": "https://images.unsplash.com/photo-1595231712325-9fedecef7575?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
+   },
     {
       "id": 6,
       "name": "Kindle Paperwhite",
@@ -53,8 +52,8 @@
       "price": 139.99,
       "category": "Books",
       "stock": 60,
-      "image": "https://m.media-amazon.com/images/I/61nA8l4A8ML._AC_SX679_.jpg"
-    },
+      "image": "https://images.unsplash.com/photo-1595231712325-9fedecef7575?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
+  },
     {
       "id": 7,
       "name": "Instant Pot Duo 7-in-1",
@@ -62,8 +61,8 @@
       "price": 89.99,
       "category": "Home Appliances",
       "stock": 40,
-      "image": "https://images-na.ssl-images-amazon.com/images/I/81o%2B1cKzE6L._AC_SL1500_.jpg"
-    },
+      "image": "https://images.unsplash.com/photo-1595231712325-9fedecef7575?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
+  },
     {
       "id": 8,
       "name": "Fitbit Charge 5",
@@ -71,8 +70,8 @@
       "price": 149.95,
       "category": "Wearables",
       "stock": 80,
-      "image": "https://static-assets.fitbit.com/production/images/charge5/charge5_black_graphite/charge5_black_graphite_hero.png"
-    },
+      "image": "https://images.unsplash.com/photo-1595231712325-9fedecef7575?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
+  },
     {
       "id": 9,
       "name": "GoPro HERO10",
@@ -80,8 +79,8 @@
       "price": 399.99,
       "category": "Cameras",
       "stock": 25,
-      "image": "https://gopro.com/content/dam/gopro/2021/products/hero10-black/hero10-black-hero.png"
-    },
+      "image": "https://images.unsplash.com/photo-1595231712325-9fedecef7575?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
+  },
     {
       "id": 10,
       "name": "Apple MacBook Air",
@@ -89,7 +88,16 @@
       "price": 999,
       "category": "Computers",
       "stock": 15,
-      "image": "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/macbook-air-m1-select-2021?wid=940&hei=1112&fmt=jpeg&qlt=95&op_usm=0.5,0.5&resMode=sharp2&op_usm=0.5,0.5&fit=constrain"
-    }
+      "image": "https://images.unsplash.com/photo-1595231712325-9fedecef7575?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
+  },
+  {
+    "id": 10,
+    "name": "Apple MacBook Air",
+    "description": "Lightweight laptop with M1 chip.",
+    "price": 999,
+    "category": "Computers",
+    "stock": 15,
+    "image": "https://images.unsplash.com/photo-1595231712325-9fedecef7575?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
+}
   ]
 }
