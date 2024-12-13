@@ -1,70 +1,73 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
-import { Button, ButtonText } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { VStack } from '@/components/ui/vstack'; // Ensure VStack is imported
-import { Box } from '@/components/ui/box'; // Ensure Box is imported
-import { Heading } from '@/components/ui/heading'; // Ensure Heading is imported
+import { FlatList, Text, StyleSheet, Image, ActivityIndicator, View } from 'react-native';
+import { Button, ButtonText } from '@/components/ui/button'; // Adjust the import based on your button component
+import { Card } from '@/components/ui/card'; // Adjust the import based on your card component
+import { VStack } from '@/components/ui/vstack'; 
+import { Box } from '@/components/ui/box'; 
+import { Heading } from '@/components/ui/heading'; 
 
 export default function HomeScreen() {
-    const [products, setProducts] = useState([]); // State for products
-    const [loading, setLoading] = useState(true); // State for loading
-    const [error, setError] = useState(null); // State for error
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/products'); // Use your API URL
+                const response = await fetch('http://localhost:3000/api/products');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setProducts(data.products); // Set products from API response
+                console.log("Fetched data:", data); // Log the fetched data
+                setProducts(data.products);
             } catch (error) {
-                setError(error.message); // Set error message
+                console.error("Fetch error:", error); // Log the error
+                setError(error.message);
             } finally {
-                setLoading(false); // Set loading to false
+                setLoading(false);
             }
         };
 
-        fetchProducts(); // Call fetch function
+        fetchProducts();
     }, []);
 
     const handleAddToCart = (product) => {
-        // Implement your add to cart functionality here
-        console.log(`${product.title} added to cart!`);
+        console.log(`${product.name} added to cart!`);
     };
 
-    const renderProduct = ({ item }) => ( // Corrected destructuring here
+    const renderProduct = ({ item }) => (
         <Card style={styles.card}>
-            <Image
-                source={{ uri: item.image }} // Ensure your API returns the correct property for the image
-                style={styles.image}
-                accessibilityLabel="Product image"
-            />
-            <Text style={styles.categoryText}>{item.category}</Text>
+            <Image source={{ uri: item.image }} style={styles.image} />
             <VStack style={styles.vStack}>
-                <Heading size="md" style={styles.heading}>
-                    {item.title} {/* Ensure your API returns the correct property for the title */}
-                </Heading>
-                <Text style={styles.description}>
-                    {item.description} {/* Ensure your API returns the correct property for the description */}
-                </Text>
+                <Heading style={styles.heading}>{item.name}</Heading>
+                <Text style={styles.priceText}>${item.price.toFixed(2)}</Text> {/* Display price */}
+                <Text style={styles.categoryText}>{item.category}</Text>
+                <Text style={styles.description}>{item.description}</Text>
+                <Box style={styles.buttonContainer}>
+                    <Button style={styles.addButton} onPress={() => handleAddToCart(item)}>
+                        <ButtonText style={styles.buttonText}>Add to Cart</ButtonText>
+                    </Button>
+                </Box>
             </VStack>
-            <Box style={styles.buttonContainer}>
-                <Button style={styles.addButton} onPress={() => handleAddToCart(item)}>
-                    <ButtonText style={styles.buttonText}>Add to cart</ButtonText>
-                </Button>
-            </Box>
         </Card>
     );
 
     if (loading) {
-        return <ActivityIndicator size="large" color="#0000ff" />; // Show loading indicator
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
+                <Text>Loading products...</Text>
+            </View>
+        );
     }
 
     if (error) {
-        return <Text>Error: {error}</Text>; // Show error message
+        return (
+            <View style={styles.errorContainer}>
+                <Text>Error: {error}</Text>
+            </View>
+        );
     }
 
     return (
@@ -72,27 +75,40 @@ export default function HomeScreen() {
             data={products}
             renderItem={renderProduct}
             keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={styles.container}
-            numColumns={2} // Set number of columns to 2 for a grid layout
-            columnWrapperStyle={styles.columnWrapper} // Optional: for spacing between columns
+            columnWrapperStyle={styles.columnWrapper}
+            numColumns={2}
+            ListEmptyComponent={<Text style={styles.emptyText}>No products available</Text>}
         />
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 5,
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    errorContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    emptyText: {
+        textAlign: 'center',
+        marginTop: 20,
+        fontSize: 16,
+        color: '#666',
     },
     columnWrapper: {
-        justifyContent: 'space-between', // Adjust spacing between columns
+        justifyContent: 'space-between',
     },
     card: {
         padding: 5,
         borderRadius: 10,
         margin: 5,
-        borderColor: "#555", // Border color
-        borderWidth: 1, // Set border width to 1 pixel
-        flex: 1, // Allow card to take available space in the column
+        borderColor: "#555",
+        borderWidth: 1,
+        flex: 1,
     },
     image: {
         height: 120,
@@ -103,7 +119,13 @@ const styles = StyleSheet.create({
     categoryText: {
         fontSize: 12,
         fontWeight: 'normal',
-        color: '#333', // Adjust color as needed
+        color: '#333',
+    },
+    priceText: { // New style for price
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#000',
+        marginBottom: 5,
     },
     vStack: {
         marginBottom: 6,
@@ -116,18 +138,18 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: 'row',
-        justifyContent: 'flex-start', // Align buttons to the start
+        justifyContent: 'flex-start',
     },
     addButton: {
         paddingHorizontal: 16,
         paddingVertical: 10,
         marginBottom: 1,
-        backgroundColor: "blue", // Set button background color
+        backgroundColor: "blue",
         borderRadius: 5,
-        flex: 1, // Allow button to take available space
+        flex: 1,
     },
     buttonText: {
-        color: '#fff', // Text color for the button
-        textAlign: 'center', // Center the text
+        color: '#fff',
+        textAlign: 'center',
     },
 });
