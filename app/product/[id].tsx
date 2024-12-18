@@ -1,6 +1,7 @@
-import { View, Text, Image, ActivityIndicator, StyleSheet, Button } from 'react-native';
+import { View, Text, Image, ActivityIndicator, StyleSheet, Button, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Stack, useLocalSearchParams } from 'expo-router';
+import '../../global.css';
 
 const DetailProduct = () => {
     const { id } = useLocalSearchParams();
@@ -41,28 +42,35 @@ const DetailProduct = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <Stack.Screen  options={{ title: product.name }} />
+        <ScrollView style={styles.container}>
+            <Stack.Screen options={{ title: product.name }} />
             {product && (
                 <>
                     <Image
                         source={{ uri: `http://localhost:3000/img/${product.image}` }}
                         style={styles.productImage}
                     />
-                    <Text style={styles.productName}>Name: {product.name}</Text>
-                    <Text style={styles.productPrice}>Price: {product.price} birr</Text>
-                    <Text style={styles.productDetails}>Details: {product.description}</Text>
-                    <Button title="Add to Cart" onPress={() => handleAddToCart(product._id)} />
+
+
+                    <Text style={styles.productName}>{product.name}</Text>
+                    <Text style={styles.productPrice}>Price {product.price} birr</Text>
+
+                    {/* Additional Attractive Text Section */}
+                    <View style={styles.additionalInfo}>
+                        <Text style={styles.productDetails}>{product.description}</Text>
+
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <Button title="Add to Cart" onPress={() => handleAddToCart(product._id)} />
+                    </View>
                 </>
             )}
-        </View>
+        </ScrollView>
     );
 };
 
 const handleAddToCart = (productId) => {
-    // Handle the add to cart action (e.g., update cart state, show a notification)
     console.log(`Adding product with ID: ${productId} to cart`);
-    // You can implement your cart logic here
 };
 
 const styles = StyleSheet.create({
@@ -70,32 +78,62 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         gap: 10,
-        justifyContent: 'flex-start', // Align items to the start
     },
     productImage: {
-        width: 300,
+        width: '100%',
         height: 300,
         resizeMode: 'contain',
         marginBottom: 25,
+        fontFamily:'robot',
     },
     productName: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 5,
+        marginBottom: 25,
+        fontFamily:'robot',
+        textAlign: 'center',
+        textTransform: 'capitalize',
     },
     productPrice: {
-        fontSize: 16,
+        fontSize: 20,
+        fontFamily:'robot',
         color: 'green',
-        marginBottom: 5,
+        textAlign: 'left',
+        textTransform: 'capitalize',
     },
     productDetails: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginBottom: 10,
+        fontSize: 17,
+        textAlign: 'left',
+        fontFamily:'robot',
+        marginBottom: 20,
     },
     errorText: {
         color: 'red',
         textAlign: 'center',
+    },
+    buttonContainer: {
+        marginTop: 20,
+        padding: 10,
+        borderRadius: 5,
+        backgroundColor: '#f0f0f0',
+    },
+    additionalInfo: {
+        marginTop: 30,
+        padding: 15,
+        backgroundColor: '#f9f9f9',
+        borderRadius: 10,
+        borderColor: '#ddd',
+        borderWidth: 1,
+    },
+    infoTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    infoText: {
+        fontSize: 16,
+        marginBottom: 10,
+        lineHeight: 22,
     },
 });
 

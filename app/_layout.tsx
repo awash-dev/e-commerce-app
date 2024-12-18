@@ -1,50 +1,45 @@
-import { Stack, Tabs } from "expo-router";
-import { Ionicons } from 'react-native-vector-icons';
+import { Stack } from "expo-router"; // Importing only Stack
+import { Ionicons } from '@expo/vector-icons'; // Correct import statement
 import "@/global.css";
-// import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 
 export default function RootLayout() {
     return (
-        // Uncomment if using Gluestack UI Provider
-        // <GluestackUIProvider>
-        <Tabs>
-            <Tabs.Screen
-                name="index"
-                options={{
-                    title: 'Awash Shop',
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="home" size={24} color={color} />
-                    ),
-                }}
-            />
-            <Tabs.Screen
-                name="product/[id]"
-                options={{
-                    title: 'Product',
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="book" size={24} color={color} />
-                    ),
-                }}
-            />
-            <Tabs.Screen
-                name="Cart"
-                options={{
-                    title: 'Cart',
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="cart" size={24} color={color} />
-                    ),
-                }}
-            />
-            <Tabs.Screen
-                name="Profile"
-                options={{
-                    title: 'Profile',
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="person" size={24} color={color} />
-                    ),
-                }}
-            />
-        </Tabs>
-        // </GluestackUIProvider> not there
+        <GluestackUIProvider>
+            <Stack>
+                <Stack.Screen
+                    name="index"
+                    options={{
+                        title: "Awash Shop",
+                        headerShown: true,
+
+                    }}
+                />
+                <Stack.Screen
+                    name="product/[id]"
+                    options={{
+                        title: "Product Details",
+                        headerShown: true,
+
+                    }}
+                />
+                <Stack.Screen
+                    name="Cart"
+                    options={{
+                        title: "Cart",
+                        headerShown: true,
+
+                    }}
+                />
+                <Stack.Screen
+                    name="Profile"
+                    options={{
+                        title: "Profile",
+                        headerShown: true,
+
+                    }}
+                />
+            </Stack>
+        </GluestackUIProvider>
     );
 }
