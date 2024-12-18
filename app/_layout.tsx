@@ -45,6 +45,6 @@ export default function RootLayout() {
                 }}
             />
         </Tabs>
-        // </GluestackUIProvider> not
+        // </GluestackUIProvider> not there
     );
 }

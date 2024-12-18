@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 
 export default function ProfileScreen() {
-    const navigation = useNavigation(); // Get the navigation object
+    const navigation = useNavigation(); 
     const [userData, setUserData] = useState({ username: "", email: "", password: "" });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
