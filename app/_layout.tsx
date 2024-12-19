@@ -1,7 +1,8 @@
-import { Stack } from "expo-router"; // Importing only Stack
-import { Ionicons } from '@expo/vector-icons'; // Correct import statement
-import "@/global.css";
-import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { Stack, useNavigation, Link } from "expo-router"; // Importing Stack, useNavigation, and Link
+import "@/global.css"; // Global styles
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider"; // UI provider
+import { FontAwesome } from "@expo/vector-icons"; // Importing Expo vector icons
+import { View } from "react-native"; // Importing View for layout
 
 export default function RootLayout() {
     return (
@@ -11,8 +12,16 @@ export default function RootLayout() {
                     name="index"
                     options={{
                         title: "Awash Shop",
-                        headerShown: true,
-
+                        headerRight: () => (
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Link href="/Cart" style={{ marginRight: 10 }}>
+                                    <FontAwesome name="shopping-cart" size={28} style={{ color: 'green' }} />
+                                </Link>
+                                <Link href="/Profile" style={{ marginLeft: 20, marginRight: 10 }}>
+                                    <FontAwesome name="user" size={28} style={{ color: 'blue' }} />
+                                </Link>
+                            </View>
+                        ),
                     }}
                 />
                 <Stack.Screen
@@ -20,23 +29,20 @@ export default function RootLayout() {
                     options={{
                         title: "Product Details",
                         headerShown: true,
-
                     }}
                 />
                 <Stack.Screen
-                    name="Cart"
+                    name="Cart" // Ensure you have a screen named "cart"
                     options={{
-                        title: "Cart",
+                        title: "Shopping Cart",
                         headerShown: true,
-
                     }}
                 />
                 <Stack.Screen
-                    name="Profile"
+                    name="profile" // Ensure you have a screen named "profile"
                     options={{
                         title: "Profile",
                         headerShown: true,
-
                     }}
                 />
             </Stack>

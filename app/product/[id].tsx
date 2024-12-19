@@ -2,12 +2,15 @@ import { View, Text, Image, ActivityIndicator, StyleSheet, Button, ScrollView } 
 import React, { useEffect, useState } from 'react';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import '../../global.css';
+import UseCart from '@/store/CartStore';
 
 const DetailProduct = () => {
     const { id } = useLocalSearchParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const addProduct = UseCart(state => state.addProduct); // Correct usage of UseCart
 
     useEffect(() => {
         fetchProductDetails();
@@ -41,6 +44,11 @@ const DetailProduct = () => {
         );
     }
 
+    const addToCart = () => {
+        addProduct(product);
+        console.log(`Added product with ID: ${product.id} to cart`); // Logging for debugging
+    };
+
     return (
         <ScrollView style={styles.container}>
             <Stack.Screen options={{ title: product.name }} />
@@ -50,27 +58,18 @@ const DetailProduct = () => {
                         source={{ uri: `http://localhost:3000/img/${product.image}` }}
                         style={styles.productImage}
                     />
-
-
                     <Text style={styles.productName}>{product.name}</Text>
-                    <Text style={styles.productPrice}>Price {product.price} birr</Text>
-
-                    {/* Additional Attractive Text Section */}
+                    <Text style={styles.productPrice}>Price: {product.price} birr</Text>
                     <View style={styles.additionalInfo}>
                         <Text style={styles.productDetails}>{product.description}</Text>
-
                     </View>
                     <View style={styles.buttonContainer}>
-                        <Button title="Add to Cart" onPress={() => handleAddToCart(product._id)} />
+                        <Button title="Add to Cart" onPress={addToCart} />
                     </View>
                 </>
             )}
         </ScrollView>
     );
-};
-
-const handleAddToCart = (productId) => {
-    console.log(`Adding product with ID: ${productId} to cart`);
 };
 
 const styles = StyleSheet.create({
@@ -84,27 +83,22 @@ const styles = StyleSheet.create({
         height: 300,
         resizeMode: 'contain',
         marginBottom: 25,
-        fontFamily:'robot',
     },
     productName: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 25,
-        fontFamily:'robot',
         textAlign: 'center',
         textTransform: 'capitalize',
     },
     productPrice: {
         fontSize: 20,
-        fontFamily:'robot',
         color: 'green',
         textAlign: 'left',
-        textTransform: 'capitalize',
     },
     productDetails: {
         fontSize: 17,
         textAlign: 'left',
-        fontFamily:'robot',
         marginBottom: 20,
     },
     errorText: {
@@ -124,16 +118,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: '#ddd',
         borderWidth: 1,
-    },
-    infoTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    infoText: {
-        fontSize: 16,
-        marginBottom: 10,
-        lineHeight: 22,
     },
 });
 
