@@ -1,10 +1,12 @@
-import { Stack, useNavigation, Link } from "expo-router"; // Importing Stack, useNavigation, and Link
+import { Stack, Link } from "expo-router"; // Importing Stack, useNavigation, and Link
 import "@/global.css"; // Global styles
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider"; // UI provider
 import { FontAwesome } from "@expo/vector-icons"; // Importing Expo vector icons
-import { View } from "react-native"; // Importing View for layout
+import { Text, View } from "react-native"; // Importing View for layout
+import UseCart from "@/store/CartStore";
 
 export default function RootLayout() {
+    const cartItemsNum = UseCart(state => state.items.length);
     return (
         <GluestackUIProvider>
             <Stack>
@@ -16,9 +18,22 @@ export default function RootLayout() {
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Link href="/Cart" style={{ marginRight: 10 }}>
                                     <FontAwesome name="shopping-cart" size={28} style={{ color: 'green' }} />
+                                    <View style={{
+                                        flex:1,
+                                        width: 20,
+                                        height: 20,
+                                        borderRadius: 12,
+                                        backgroundColor: 'red',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        position: 'absolute',
+                                    }}>
+                                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{cartItemsNum}</Text>
+                                    </View>
                                 </Link>
                                 <Link href="/Profile" style={{ marginLeft: 20, marginRight: 10 }}>
                                     <FontAwesome name="user" size={28} style={{ color: 'blue' }} />
+
                                 </Link>
                             </View>
                         ),

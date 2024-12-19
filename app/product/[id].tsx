@@ -1,34 +1,35 @@
 import { View, Text, Image, ActivityIndicator, StyleSheet, Button, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import '../../global.css';
 import UseCart from '@/store/CartStore';
+import { FontAwesome } from "@expo/vector-icons"; // Importing Expo vector icons
 
 const DetailProduct = () => {
-    const { id } = useLocalSearchParams();
+    const { id } = useLocalSearchParams(); // Extracting product ID from URL parameters
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const addProduct = UseCart(state => state.addProduct); // Correct usage of UseCart
+    const addProduct = UseCart(state => state.addProduct); // Accessing addProduct from Zustand store
+    const cartItemsNum = UseCart(state => state.items.length); // Getting number of items in cart
 
     useEffect(() => {
         fetchProductDetails();
     }, [id]);
 
     const fetchProductDetails = async () => {
-        const URL = `http://localhost:3000/api/products/${id}`; // Adjust based on your API
+        const URL = `http://localhost:3000/api/products/${id}`; // API URL to fetch product details
         try {
             const response = await fetch(URL);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            setProduct(data);
+            setProduct(data); // Setting the fetched product data
         } catch (error) {
-            setError(error.message);
+            setError(error.message); // Handling errors
         } finally {
-            setLoading(false);
+            setLoading(false); // Setting loading to false after fetching
         }
     };
 
@@ -44,14 +45,39 @@ const DetailProduct = () => {
         );
     }
 
+    // Function to add product to cart
     const addToCart = () => {
-        addProduct(product);
-        console.log(`Added product with ID: ${product._id} to cart`); // Logging for debugging
+        if (product) {
+            addProduct(product); // Adding product to cart
+            console.log(`Added product with ID: ${product._id} to cart`); // Logging for debugging
+        }
     };
 
     return (
         <ScrollView style={styles.container}>
-            <Stack.Screen options={{ title: product.name }} />
+            <Stack.Screen options={{
+                title: product.name,
+                headerRight: () => (
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Link href="../Cart" style={{ marginRight: 10 }}>
+                            <FontAwesome name="shopping-cart" size={28} style={{ color: 'green' }} />
+                            <View style={{
+                                flex: 1,
+                                width: 20,
+                                height: 20,
+                                borderRadius: 12,
+                                backgroundColor: 'red',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                position: 'absolute',
+                            }}>
+                                <Text style={{ color: 'white', fontWeight: 'bold' }}>{cartItemsNum}</Text>
+                            </View>
+                        </Link>
+                    </View>
+                ),
+            }} />
+
             {product && (
                 <>
                     <Image
