@@ -46,7 +46,7 @@ const DetailProduct = () => {
 
     const addToCart = () => {
         addProduct(product);
-        console.log(`Added product with ID: ${product.id} to cart`); // Logging for debugging
+        console.log(`Added product with ID: ${product._id} to cart`); // Logging for debugging
     };
 
     return (

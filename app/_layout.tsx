@@ -24,13 +24,7 @@ export default function RootLayout() {
                         ),
                     }}
                 />
-                <Stack.Screen
-                    name="product/[id]"
-                    options={{
-                        title: "Product Details",
-                        headerShown: true,
-                    }}
-                />
+
                 <Stack.Screen
                     name="Cart" // Ensure you have a screen named "cart"
                     options={{
