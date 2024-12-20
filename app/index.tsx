@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Text, View, ActivityIndicator, StyleSheet, Pressable } from 'react-native';
-import { Link, useRouter } from 'expo-router'; // Import useRouter
+import { Link } from 'expo-router'; // Import useRouter
 
 export default function HomeScreen() {
-    const router = useRouter(); // Initialize the router
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
