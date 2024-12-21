@@ -1,16 +1,47 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
-import { Link, router } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons'; // Importing icons from Ionicons
+import { Link, useRouter } from 'expo-router'; // Use `useRouter` for navigation
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage for token management
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false); // Loading state
+    const router = useRouter(); // Use the router for navigation
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         if (username && email && password) {
-            router.push('/Home/screen/Home');
+            setLoading(true); // Start loading
+            try {
+                const response = await fetch('http://localhost:3000/api/users/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        password,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store the token in AsyncStorage if returned
+                    await AsyncStorage.setItem('userToken', data.token);
+                    Alert.alert('Success', 'Registration successful!');
+                    router.push('/Home/screen/Home');
+                } else {
+                    Alert.alert('Error', data.message || 'Registration failed.');
+                }
+            } catch (error) {
+                Alert.alert('Error', 'Something went wrong.');
+            } finally {
+                setLoading(false); // Stop loading
+            }
         } else {
             Alert.alert('Error', 'Please fill in all fields.');
         }
@@ -18,7 +49,7 @@ const Register = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Wellcome to Awash Shop </Text>
+            <Text style={styles.title}>Welcome to Awash Shop</Text>
             <Text style={styles.title}>Register</Text>
 
             <View style={styles.inputContainer}>
@@ -54,8 +85,12 @@ const Register = () => {
                 />
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={handleRegister}>
-                <Text style={styles.buttonText}>Register</Text>
+            <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
+                {loading ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                    <Text style={styles.buttonText}>Register</Text>
+                )}
             </TouchableOpacity>
 
             <View style={styles.linkContainer}>

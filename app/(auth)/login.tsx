@@ -1,17 +1,42 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons'; // Importing icons from Ionicons
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage for token management
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false); // Loading state
     const router = useRouter(); // Use the router for navigation
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (email && password) {
-            // Navigate to the Home screen on successful login
-            router.push('/Home/screen/Home');
+            setLoading(true); // Start loading
+            try {
+                const response = await fetch('http://localhost:3000/api/users/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store the token in AsyncStorage
+                    await AsyncStorage.setItem('userToken', data.token);
+                    Alert.alert('Success', 'Login successful!');
+                    router.push('/Home/screen/Home');
+                } else {
+                    Alert.alert('Error', data.message || 'Login failed.');
+                }
+            } catch (error) {
+                Alert.alert('Error', 'Something went wrong. Please try again.');
+            } finally {
+                setLoading(false); // Stop loading
+            }
         } else {
             Alert.alert('Error', 'Please fill in both fields.');
         }
@@ -45,8 +70,12 @@ const LoginScreen = () => {
                 />
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Login</Text>
+            <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+                {loading ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                    <Text style={styles.buttonText}>Login</Text>
+                )}
             </TouchableOpacity>
 
             <View style={styles.linkContainer}>
