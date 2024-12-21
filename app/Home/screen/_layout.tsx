@@ -2,6 +2,7 @@ import { Stack, Link } from "expo-router"; // Importing Stack, useNavigation, an
 import { FontAwesome } from "@expo/vector-icons"; // Importing Expo vector icons
 import { Text, View } from "react-native"; // Importing View for layout
 import UseCart from "@/store/CartStore";
+import DetailProduct from "../product/[id]";
 
 export default function RootLayout() {
     const cartItemsNum = UseCart(state => state.items.length);
@@ -52,6 +53,9 @@ export default function RootLayout() {
                     headerBackTitleVisible: true, // Added to show the back title
                 }}
             />
+            <Stack>
+                <Stack.Screen name='/Home/product/[id]' options={{ headerShown: true }} />
+            </Stack>
         </Stack>
     );
 }

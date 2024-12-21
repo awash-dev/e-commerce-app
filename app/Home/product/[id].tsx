@@ -56,15 +56,9 @@ const DetailProduct = () => {
         <ScrollView style={styles.container}>
             <Stack.Screen options={{
                 title: product.name,
-                headerBackTitle: true,
-                headerLeft: () => (
-                    <Link href="/Home/screen/Home" style={{ marginLeft: 10 }}>
-                        <FontAwesome name="arrow-left" size={28} style={{ color: 'black' }} />
-                    </Link>
-                ),
                 headerRight: () => (
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Link href="/Home/screen/Cart" style={{ marginRight: 40 }}>
+                        <Link href="../Cart" style={{ marginRight: 40 }}>
                             <FontAwesome name="shopping-cart" size={28} style={{ color: 'green' }} />
                             <View style={{
                                 flex: 1,
