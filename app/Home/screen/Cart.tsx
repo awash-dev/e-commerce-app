@@ -1,6 +1,5 @@
 import UseCart from '@/store/CartStore';
 import { View, StyleSheet, Image, FlatList, Text, Button, TouchableOpacity } from 'react-native';
-import "@/global.css";
 import { Redirect } from 'expo-router';
 
 const Cart = () => {

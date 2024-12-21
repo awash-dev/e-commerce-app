@@ -8,12 +8,12 @@ export default function RootLayout() {
     return (
         <Stack>
             <Stack.Screen
-                name="index"
+                name="Home"
                 options={{
                     title: "Awash Shop",
                     headerRight: () => (
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Link href="/Cart" style={{ marginRight: 10 }}>
+                            <Link href="/Home/screen/Cart" style={{ marginRight: 10 }}>
                                 <FontAwesome name="shopping-cart" size={28} style={{ color: 'green' }} />
                                 <View style={{
                                     flex: 1,
@@ -28,9 +28,8 @@ export default function RootLayout() {
                                     <Text style={{ color: 'white', fontWeight: 'bold' }}>{cartItemsNum}</Text>
                                 </View>
                             </Link>
-                            <Link href="/Profile" style={{ marginLeft: 20, marginRight: 10 }}>
+                            <Link href="/Home/screen/Profile" style={{ marginLeft: 20, marginRight: 10 }}>
                                 <FontAwesome name="user" size={28} style={{ color: 'blue' }} />
-
                             </Link>
                         </View>
                     ),
@@ -42,13 +41,15 @@ export default function RootLayout() {
                 options={{
                     title: "Shopping Cart",
                     headerShown: true,
+                    headerBackTitleVisible: true, // Added to show the back title
                 }}
             />
             <Stack.Screen
                 name="Profile" // Ensure you have a screen named "profile"
                 options={{
-                    title: "profile",
+                    title: "Profile",
                     headerShown: true,
+                    headerBackTitleVisible: true, // Added to show the back title
                 }}
             />
         </Stack>

@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+
 const Profile = () => {
   return (
     <View style={styles.container}>
@@ -20,8 +21,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     textTransform: 'capitalize',
-    justifyContent: 'center'
-
+    justifyContent: 'center',
+    width: '90%', // Added to make the container 90% width
+    alignSelf: 'center', // Added to center the container
   },
   title: {
     fontSize: 20,
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     gap: 40,
-
+    width: '100%', // Added to make the info container full width
   },
   icon: {
     width: 150,
@@ -47,6 +49,5 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: '#000',
-
   }
 })
