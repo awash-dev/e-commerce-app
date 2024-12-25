@@ -17,7 +17,7 @@ const DetailProduct = () => {
     }, [id]);
 
     const fetchProductDetails = async () => {
-        const URL = `http://localhost:3000/api/products/${id}`; // API URL to fetch product details
+        const URL = `https://backend-sand-six.vercel.app/api/products/list/${id}`; // API URL to fetch product details
         try {
             const response = await fetch(URL);
             if (!response.ok) {
@@ -58,7 +58,7 @@ const DetailProduct = () => {
                 title: product.name,
                 headerRight: () => (
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Link href="../Cart" style={{ marginRight: 40 }}>
+                        <Link href="/Home/screen/Cart" style={{ marginRight: 40 }}>
                             <FontAwesome name="shopping-cart" size={28} style={{ color: 'green' }} />
                             <View style={{
                                 flex: 1,
@@ -80,7 +80,7 @@ const DetailProduct = () => {
             {product && (
                 <>
                     <Image
-                        source={{ uri: `http://localhost:3000/img/${product.image}` }}
+                        source={{ uri: `https://backend-sand-six.vercel.app/${product.image}` }}
                         style={styles.productImage}
                     />
                     <Text style={styles.productName}>{product.name}</Text>

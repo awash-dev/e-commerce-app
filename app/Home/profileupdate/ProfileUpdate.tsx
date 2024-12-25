@@ -1,89 +1,74 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { Image, StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
+import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation
-import { router } from 'expo-router';
 
-const ProfileUpdate = () => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
+const ProfileUpdate = ({ route, navigation }) => {
+  
+    // Check if userData is available
+    if (!userData) {
+        Alert.alert('Error', 'User data not found. Please log in again.');
+        navigation.navigate('Login'); // Redirect to Login screen
+        return null; // Prevent rendering the rest of the component
+    }
+
+    const [username, setUsername] = useState(userData.username);
+    const [email, setEmail] = useState(userData.email);
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(true);
-    const [userId, setUserId] = useState(null); // Store user ID
-    const navigation = useNavigation(); // Initialize navigation
+    const [image, setImage] = useState(userData.image);
 
-    // Fetch user data when the component mounts
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const token = await AsyncStorage.getItem('userToken');
-                const response = await fetch('http://localhost:3000/api/users/profile', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user data');
-                }
-
-                const data = await response.json();
-                setUsername(data.username);
-                setEmail(data.email);
-                setUserId(data.id); // Set user ID
-            } catch (error) {
-                Alert.alert('Error', error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchUserData();
-    }, []);
-
-    const handleUpdate = async () => {
-        setLoading(true);
+    const handleUpdateProfile = async () => {
         try {
             const token = await AsyncStorage.getItem('userToken');
-            const body = {
-                username,
-                email,
-                ...(password && { password }), // Only include password if it's provided
-            };
+            const userId = await AsyncStorage.getItem('userId');
 
-            const response = await fetch(`http://localhost:3000/api/users/${userId}`, { // Use user ID in the URL
+            // Basic validation
+            if (!username || !email) {
+                Alert.alert('Error', 'Username and email are required.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('email', email);
+            if (password) formData.append('password', password); // Only append if password is provided
+            if (image) {
+                formData.append('profileImage', {
+                    uri: image,
+                    type: 'image/jpeg', // Adjust based on your image type
+                    name: 'profile.jpg', // Change the name as required
+                });
+            }
+
+            const response = await fetch(`https://backend-sand-six.vercel.app/api/users/profileUpdate/${userId}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(body),
+                body: formData,
             });
 
             if (!response.ok) {
-                throw new Error('Failed to update user data');
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to update profile');
             }
 
-            Alert.alert('Success', 'Profile updated successfully.');
-            router.push('/Home/screen/Home')
+            Alert.alert('Success', 'Profile updated successfully');
+            navigation.goBack(); // Go back to the previous screen
         } catch (error) {
             Alert.alert('Error', error.message);
-        } finally {
-            setLoading(false);
         }
     };
-
-    if (loading) {
-        return <ActivityIndicator size="large" color="#007BFF" />;
-    }
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Update Profile</Text>
+            <Image
+                source={{ uri: image ? `https://backend-sand-six.vercel.app/img/${image}` : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOuxrvcNMfGLh73uKP1QqYpKoCB0JLXiBMvA&s' }}
+                style={styles.icon}
+            />
             <TextInput
                 style={styles.input}
-                placeholder="Name"
+                placeholder="Username"
                 value={username}
                 onChangeText={setUsername}
             />
@@ -93,16 +78,17 @@ const ProfileUpdate = () => {
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
+                autoCapitalize="none"
             />
             <TextInput
                 style={styles.input}
-                placeholder="Password (leave blank to keep current)"
+                placeholder="Password (leave blank to not change)"
+                secureTextEntry
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry
             />
-            <TouchableOpacity style={styles.button} onPress={handleUpdate}>
-                <Text style={styles.buttonText}>Update</Text>
+            <TouchableOpacity onPress={handleUpdateProfile} style={styles.updateButton}>
+                <Text style={styles.buttonText}>Update Profile</Text>
             </TouchableOpacity>
         </View>
     );
@@ -113,35 +99,37 @@ export default ProfileUpdate;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         padding: 20,
         backgroundColor: '#f4f4f4',
     },
     title: {
         fontSize: 24,
+        fontWeight: 'bold',
         marginBottom: 20,
-        color: '#333',
+    },
+    icon: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        alignSelf: 'center',
+        marginBottom: 20,
     },
     input: {
-        width: '100%',
-        padding: 15,
-        marginVertical: 10,
-        borderWidth: 1,
+        height: 40,
         borderColor: '#ccc',
+        borderWidth: 1,
         borderRadius: 5,
-        backgroundColor: '#fff',
+        paddingHorizontal: 10,
+        marginBottom: 15,
     },
-    button: {
+    updateButton: {
         backgroundColor: '#007BFF',
-        padding: 15,
+        padding: 10,
         borderRadius: 5,
         alignItems: 'center',
-        width: '100%',
     },
     buttonText: {
         color: '#fff',
         fontSize: 16,
-        fontWeight: 'bold',
     },
 });

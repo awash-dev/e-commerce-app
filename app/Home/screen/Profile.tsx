@@ -1,7 +1,7 @@
-import { Image, StyleSheet, Text, View, ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Link, router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -10,28 +10,22 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = await AsyncStorage.getItem('userToken'); // Retrieve the token from AsyncStorage
-        if (!token) {
-          Alert.alert('Error', 'No authentication token found.');
-          return;
+        const token = await AsyncStorage.getItem('userToken');
+        console.log('Token:', token); // Log the token to check if it's valid
+        if (token) {
+          const response = await fetch('https://backend-sand-six.vercel.app/api/users/profile', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const data = await response.json();
+          console.log('Fetched user data:', data); // Log the fetched data
+          setUserData(data);
+        } else {
+          console.error('No token found');
         }
-
-        const response = await fetch('http://localhost:3000/api/users/profile', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch user data');
-        }
-
-        const data = await response.json();
-        setUserData(data);
       } catch (error) {
-        Alert.alert('Error', error.message);
+        console.error('Error fetching user data:', error);
       } finally {
         setLoading(false);
       }
@@ -41,47 +35,44 @@ const Profile = () => {
   }, []);
 
   const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem('userToken'); // Clear the token
-      Alert.alert('Success', 'You have logged out successfully.');
-      router.push('/login');
-    } catch (error) {
-      Alert.alert('Error', 'Failed to log out.');
-    }
+    await AsyncStorage.removeItem('userToken');
+    router.push('/login');
   };
 
   if (loading) {
+    return <ActivityIndicator size="large" color="#007BFF" />;
+  }
+
+  console.log('User Data State:', userData);
+
+  if (!userData || Object.keys(userData).length === 0) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#007BFF" />
+        <Text style={styles.text}>No user data available.</Text>
       </View>
     );
   }
 
-  if (!userData) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>No user data found.</Text>
-      </View>
-    );
-  }
+  const imageUrl = userData.profileImage
+    ? `https://backend-iota-flame.vercel.app/img/${userData.profileImage}`
+    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOuxrvcNMfGLh73uKP1QqYpKoCB0JLXiBMvA&s';
 
   return (
     <View style={styles.container}>
       <View style={styles.info}>
         <Image
-          source={{
-            uri: userData.profilePicture || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOuxrvcNMfGLh73uKP1QqYpKoCB0JLXiBMvA&s'
-          }}
+          source={{ uri: imageUrl }}
           style={styles.icon}
         />
-        <Text style={styles.text}>Name: {userData.username}</Text>
+        <Text style={styles.text}>Username: {userData.username}</Text>
         <Text style={styles.text}>Email: {userData.email}</Text>
+        <Text style={styles.text}>Password: {userData.password}</Text>
+
         <View style={styles.buttonContainer}>
-          <Link href={{ pathname: '/Home/profileupdate/ProfileUpdate', params: { userData } }}>
-            <TouchableOpacity style={styles.editButton}>
-              <Text style={styles.editLink}>Edit</Text>
-            </TouchableOpacity>
+          <Link href="/Home/profileupdate/ProfileUpdate">
+            <View style={styles.editButton}>
+              <Text style={styles.editLink}>Update Profile</Text>
+            </View>
           </Link>
           <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
             <Text style={styles.logoutText}>Logout</Text>
@@ -101,12 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '90%',
     alignSelf: 'center',
-    backgroundColor: '#f4f4f4', // Light background
-  },
-  title: {
-    fontSize: 20,
-    color: '#000',
-    textAlign: 'center',
+    backgroundColor: '#f4f4f4',
   },
   info: {
     alignItems: 'center',
@@ -116,27 +102,27 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: '#fff',
     borderRadius: 15,
-    shadowColor: '#000', // Add shadow for depth
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 3, // For Android shadow
+    elevation: 3,
     gap: 20,
     width: '100%',
   },
   icon: {
     width: 150,
     height: 150,
-    borderRadius: 75, // Make the image circular
+    borderRadius: 75,
     borderWidth: 2,
-    borderColor: '#007BFF', // Border color for the image
+    borderColor: '#007BFF',
   },
   text: {
     fontSize: 16,
-    color: '#333', // Darker text color
+    color: '#333',
     textAlign: 'left',
   },
   buttonContainer: {
@@ -148,21 +134,26 @@ const styles = StyleSheet.create({
   editButton: {
     backgroundColor: '#007BFF',
     padding: 10,
+    color: '#fff',
     borderRadius: 5,
     elevation: 2,
+    fontFamily: "sans-serif",
+  },
+  logoutButton: {
+    backgroundColor: '#FF4D4D',
+    padding: 10,
+    borderRadius: 5,
+    elevation: 2,
+    color: '#fff',
   },
   editLink: {
     color: '#fff',
     fontSize: 16,
-  },
-  logoutButton: {
-    backgroundColor: '#FF6347',
-    padding: 10,
-    borderRadius: 5,
-    elevation: 2,
+    fontWeight: 'bold',
   },
   logoutText: {
     color: '#fff',
     fontSize: 16,
-  },
+    fontWeight: 'bold',
+  }
 });

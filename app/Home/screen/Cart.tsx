@@ -31,7 +31,7 @@ const Cart = () => {
           contentContainerStyle={{ gap: 10 }} // Set gap between items
           renderItem={({ item }) => (
             <View style={styles.itemContainer}>
-              <Image source={{ uri: `http://localhost:3000/img/${item.product.image}` }} style={styles.image} />
+              <Image source={{ uri: `https://backend-sand-six.vercel.app/img/${item.product.image}` }} style={styles.image} />
               <View style={styles.details}>
                 <Text style={styles.itemName}>{item.product.name}</Text>
                 <Text style={styles.itemPrice}>{(item.product.price * item.quantity).toFixed(2)} Birr</Text>

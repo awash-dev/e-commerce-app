@@ -1,21 +1,25 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
-import { Link, useRouter } from 'expo-router'; // Use `useRouter` for navigation
+import { Link, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage for token management
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false); // Loading state
-    const router = useRouter(); // Use the router for navigation
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     const handleRegister = async () => {
+        console.log('Username:', username);
+        console.log('Email:', email);
+        console.log('Password:', password);
+
         if (username && email && password) {
-            setLoading(true); // Start loading
+            setLoading(true);
             try {
-                const response = await fetch('http://localhost:3000/api/users/register', {
+                const response = await fetch('https://backend-sand-six.vercel.app/api/users/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -28,19 +32,25 @@ const Register = () => {
                 });
 
                 const data = await response.json();
+                console.log('Response:', data);
 
                 if (response.ok) {
-                    // Store the token in AsyncStorage if returned
-                    await AsyncStorage.setItem('userToken', data.token);
-                    Alert.alert('Success', 'Registration successful!');
-                    router.push('/Home/screen/Home');
+                    if (data.token) {
+                        await AsyncStorage.setItem('userToken', data.token);
+                        Alert.alert('Success', 'Registration successful!');
+                        router.push('/Home/screen/Home');
+                    } else {
+                        Alert.alert('Error', 'Token not received. Registration failed.');
+                    }
                 } else {
                     Alert.alert('Error', data.message || 'Registration failed.');
                 }
+                
             } catch (error) {
+                console.error('Error:', error);
                 Alert.alert('Error', 'Something went wrong.');
             } finally {
-                setLoading(false); // Stop loading
+                setLoading(false);
             }
         } else {
             Alert.alert('Error', 'Please fill in all fields.');

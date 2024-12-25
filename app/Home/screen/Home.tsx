@@ -26,7 +26,7 @@ export default function HomeScreen() {
     }, []);
 
     const getProducts = async () => {
-        const URL = 'http://localhost:3000/api/products'; // Replace with your IP address
+        const URL = 'https://backend-sand-six.vercel.app/api/products/list'; // Replace with your IP address
         try {
             const response = await fetch(URL);
             if (!response.ok) {
@@ -41,6 +41,21 @@ export default function HomeScreen() {
             setLoading(false);
         }
     };
+
+    const ProductItem = React.memo(({ item }) => (
+        <View style={styles.productContainer}>
+            <Link href={`/Home/product/${item.slug || item._id}`} style={styles.link} asChild>
+                <Pressable style={styles.product}>
+                    <Image
+                        source={{ uri: `https://backend-iota-flame.vercel.app/img/${item.image}` }} // Replace with your IP address
+                        style={styles.productImage}
+                    />
+                    <Text style={styles.productName}>Name: {item.name}</Text>
+                    <Text style={styles.productPrice}>Price: {item.price} birr</Text>
+                </Pressable>
+            </Link>
+        </View>
+    ));
 
     if (loading) {
         return <ActivityIndicator size="large" color="#0000ff" />;
@@ -58,23 +73,10 @@ export default function HomeScreen() {
         <View style={styles.container}>
             <FlatList
                 data={products}
-                renderItem={({ item }) => (
-                    <View style={styles.productContainer}>
-                        <Link href={`/Home/product/${item.slug || item._id}`} style={styles.link} asChild>
-                            <Pressable style={styles.product}>
-                                <Image
-                                    source={{ uri: `http://localhost:3000/img/${item.image}` }} // Replace with your IP address
-                                    style={styles.productImage}
-                                />
-                                <Text style={styles.productName}>Name: {item.name}</Text>
-                                <Text style={styles.productPrice}>Price: {item.price} birr</Text>
-                            </Pressable>
-                        </Link>
-                    </View>
-                )}
-                numColumns={getNumColumns()} // Set number of columns dynamically
+                renderItem={({ item }) => <ProductItem item={item} />}
+                numColumns={getNumColumns()}
                 columnWrapperStyle={{ justifyContent: 'space-between' }}
-                keyExtractor={(item) => item._id} // Ensure each item has a unique key
+                keyExtractor={(item) => item._id}
             />
         </View>
     );

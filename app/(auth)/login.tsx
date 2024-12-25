@@ -1,20 +1,20 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons'; // Importing icons from Ionicons
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage for token management
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false); // Loading state
-    const router = useRouter(); // Use the router for navigation
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     const handleLogin = async () => {
         if (email && password) {
-            setLoading(true); // Start loading
+            setLoading(true);
             try {
-                const response = await fetch('http://localhost:3000/api/users/login', {
+                const response = await fetch('https://backend-sand-six.vercel.app/api/users/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -25,7 +25,6 @@ const LoginScreen = () => {
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Store the token in AsyncStorage
                     await AsyncStorage.setItem('userToken', data.token);
                     Alert.alert('Success', 'Login successful!');
                     router.push('/Home/screen/Home');
@@ -35,7 +34,7 @@ const LoginScreen = () => {
             } catch (error) {
                 Alert.alert('Error', 'Something went wrong. Please try again.');
             } finally {
-                setLoading(false); // Stop loading
+                setLoading(false);
             }
         } else {
             Alert.alert('Error', 'Please fill in both fields.');
